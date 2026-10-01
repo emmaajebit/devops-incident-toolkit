@@ -1,0 +1,87 @@
+
+════════════════════════════════════════════════════════════
+  Disk Troubleshooting
+  host=hds-6w8assew2qn8  utc=2026-09-20T13:13:26Z  toolkit=1.0.0
+════════════════════════════════════════════════════════════
+scan root: /tmp
+
+── Filesystems ──
+Filesystem     Type     Size  Used Avail Use% Mounted on
+overlay        overlay   20G   13M   19G   1% /
+shm            tmpfs     64M     0   64M   0% /dev/shm
+/dev/vdd       erofs    1.9M  1.9M     0 100% /.hades-container-tools
+grok-files     fuse      32Z     0   32Z   0% /home/workdir/artifacts
+
+inodes:
+Filesystem     Inodes IUsed IFree IUse% Mounted on
+overlay          1.3M   569  1.3M    1% /
+shm              248K     1  248K    1% /dev/shm
+/dev/vdd            -     -   16E     - /.hades-container-tools
+grok-files       8.0E     0  8.0E    0% /home/workdir/artifacts
+
+── Threshold evaluation ──
+[OK]    / (overlay) 1% used
+[FAIL]  /.hades-container-tools (/dev/vdd) 100% full
+[OK]    /home/workdir/artifacts (grok-files) 0% used
+
+── Block devices & scheduler ──
+NAME    SIZE TYPE FSTYPE MOUNTPOINT              ROTA SCHED  RA
+nullb0  250G disk                                   0 none  128
+zram0     0B disk                                   0       128
+vda       2G disk                                   1 none  128
+vdb      20G disk                                   1 none  128
+vdc    15.9G disk                                   1 none  128
+vdd     1.8M disk        /.hades-container-tools    1 none  128
+
+
+── IO activity ──
+vmstat 1 5:
+procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu
+ 0  0      0 1706792   1948 160112    0    0   356    36  531    5  1  1 98  0  0  0
+ 0  0      0 1714792   1948 160104    0    0     0     0  170  206  1  0 100  0  0  0
+ 2  0      0 1708652   1948 160104    0    0     0     4  570 1118  1  1 98  0  0  0
+ 0  0      0 1708576   1948 160144    0    0     0     0  152  171  0  0 100  0  0  0
+ 0  0      0 1708576   1948 160144    0    0     0     0   60   63  0  0 100  0  0  0
+
+/proc/diskstats (raw, last 8 lines):
+   7       6 loop6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       7 loop7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 254       0 vda 181 31 29574 22 0 0 0 0 0 24 22 0 0 0 0 0 0
+ 254      16 vdb 26 3 226 8 292 595 28224 133 0 21768 153 45 0 384 11 0 0
+ 254      32 vdc 1886 0 245056 270 0 0 0 0 0 180 270 0 0 0 0 0 0
+ 254      48 vdd 24 0 2864 10 0 0 0 0 0 12 10 0 0 0 0 0 0
+ 253       0 zram0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 252       0 nullb0 1 0 8 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+── Largest directories under /tmp (depth 2, may take time) ──
+4.0K	/tmp/hsperfdata_root
+12K	/tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0
+16K	/tmp/node-compile-cache
+24K	/tmp
+
+── Largest files under /tmp (cap 5 minutes of find) ──
+       0.3 MiB   /tmp/grok-files.err
+       0.1 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/78e935bf
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/2b8bec24
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/4a7f67b1
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/c9b3658c
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/d77112d2
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/05fec450
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/d626981b
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/90925e8d
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/27141edb
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/09275b59
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/ed4d3f5c
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/ad1d190c
+       0.0 MiB   /tmp/grok-computer.out
+       0.0 MiB   /tmp/node-compile-cache/v24.15.0-x64-cf738c9d-0/298138b1
+[WARN]  find timed out or lacked permission — rerun as root
+
+── Deleted-but-open files (space not reclaimed) ──
+
+── Suggested next checks ──
+  1. If df high but du low: deleted-open files or a hidden mount.
+  2. If inodes 100% with space free: millions of tiny files (session stores, queues).
+  3. If await/svctm high in iostat: storage latency — check EBS burst, RAID, NFS.
+  4. Log explosion: journalctl --disk-usage; vacuum with journalctl --vacuum-size=500M

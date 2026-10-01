@@ -1,0 +1,78 @@
+
+════════════════════════════════════════════════════════════
+  Linux Server Health Check
+  host=hds-6w8assew2qn8  utc=2026-09-20T13:12:43Z  toolkit=1.0.0
+════════════════════════════════════════════════════════════
+
+── Identity & Uptime ──
+hostname:     hds-6w8assew2qn8
+kernel:       Linux 6.12.8+ x86_64
+os:           Ubuntu 24.04.4 LTS
+uptime:       up 5 minutes
+boot:         Sep 20
+users:        0 logged in
+Sun Sep 20 13:12:45 UTC 2026
+
+── CPU & Load ──
+cores:        2
+loadavg:      0.10 0.05 0.01  (1/5/15)
+[OK]    load per core 0.05
+
+top CPU processes:
+  PID USER     %CPU %MEM COMMAND
+   43 root      0.5  8.0 MainThread
+   91 root      0.3  0.7 grok-files
+   73 root      0.0  0.3 grok-files
+    1 root      0.0  0.0 catatonit
+  107 root      0.0  0.0 fusermount3
+ 2697 root      0.0  0.0 sh
+ 2704 root      0.0  0.4 curl
+
+── Memory ──
+/home/workdir/artifacts/devops-incident-response-toolkit/scripts/server_health.sh: line 47: 0: Input/output error
+               total        used        free      shared  buff/cache   available
+Mem:           1.9Gi       294Mi       1.6Gi       1.3Mi       157Mi       1.6Gi
+Swap:             0B          0B          0B
+free: write error: Input/output error
+[OK]    memory 15% used
+  MemAvailable:    1734116
+  SwapTotal:       0
+  SwapFree:        0
+  Dirty:           56
+  Writeback:       0
+  WritebackTmp:    0
+awk: close failed on file "/dev/stdout" (Input/output error)
+
+── Disk ──
+Filesystem     Type     Size  Used Avail Use% Mounted on
+overlay        overlay   20G   13M   19G   1% /
+/dev/vdd       erofs    1.9M  1.9M     0 100% /.hades-container-tools
+grok-files     fuse      32Z     0   32Z   0% /home/workdir/artifacts
+
+[OK]    disk / 1%
+[FAIL]  disk /.hades-container-tools 100%
+[OK]    disk /home/workdir/artifacts 0%
+
+inodes:
+Filesystem                  Inodes IUsed                IFree IUse% Mounted on
+overlay                    1310720   569              1310151    1% /
+/dev/vdd                         -     - 18446744073709551611     - /.hades-container-tools
+grok-files     9223372036854775807     0  9223372036854775807    0% /home/workdir/artifacts
+head: write error: Input/output error
+
+── Network (brief) ──
+
+listening sockets (top 20):
+/home/workdir/artifacts/devops-incident-response-toolkit/scripts/server_health.sh: line 72: 0: Input/output error
+
+── Failed / degraded systemd units ──
+/home/workdir/artifacts/devops-incident-response-toolkit/scripts/server_health.sh: line 79: 0: Input/output error
+[OK]    no failed units
+
+recent journal errors (last 20):
+-- No entries --
+
+── Security snapshot ──
+open files:   96 / 201944
+uid=0(root) gid=0(root) groups=0(root)
+id: write error: Input/output error

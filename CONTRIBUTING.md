@@ -1,41 +1,21 @@
-# Contributing to DevOps Incident Toolkit
+# Contributing
 
-Thanks for helping improve this toolkit!
+## Adding a check
 
-## How to Contribute
+1. Put shared formatting in `scripts/lib/common.sh`.
+2. Keep the new script observational — no restarts, deletes, or cloud mutations.
+3. Degrade when a binary or credential is missing (`ir_warn`, then continue).
+4. Document the signal in `docs/` and link it from the README table.
+5. Check syntax with `bash -n scripts/your_script.sh`.
 
-1. Fork the repo
-2. Create a feature branch: `git checkout -b feature/your-improvement`
-3. Make your changes
-4. Test on a real or simulated incident if possible
-5. Submit a pull request
+## Style
 
-## What We're Looking For
+- `set -u` and `pipefail`. Avoid `set -e` so one failed `ss` does not abort the snapshot.
+- Quote every expansion.
+- Prefer `/proc` and `ip`/`ss` over deprecated `ifconfig`/`netstat`, with fallbacks.
+- Thresholds belong in environment variables with defaults, not hardcoded magic numbers only.
 
-- New diagnostic scripts for other platforms (GCP, Azure, bare metal)
-- Improvements to existing scripts (better output parsing, more checks)
-- Documentation enhancements
-- Edge case handling
-- Performance improvements
+## What not to add
 
-## Script Guidelines
-
-- Always include a header comment explaining purpose
-- Use color-coded output: GREEN for OK, YELLOW for warning, RED for critical
-- Add `--help` flag support
-- Keep it read-only where possible (no destructive commands by default)
-- Make output easy to read at 3 AM during an incident
-
-## Testing
-
-Before submitting, run:
-
-```bash
-./server_health.sh --help
-./cpu_debug.sh
-# etc.
-```
-
-## Questions?
-
-Open an issue or reach out. Happy troubleshooting!
+- Exploit PoCs, credential dumpers, or anything that weakens host security.
+- Wrappers that `sudo rm` logs or `docker system prune -af` without an explicit second flag.

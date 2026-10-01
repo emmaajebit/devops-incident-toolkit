@@ -1,42 +1,26 @@
-# DevOps Incident Decision Tree
+# Decision tree
 
-Start here during an incident.
+Start at `./ir help` or `./ir suggest "<symptom>"`.
 
-## Step 1: General Health
+```
+Alert
+ ├─ Host / VM ────────────── ./ir health
+ │    ├─ CPU / load / steal ─ ./ir cpu
+ │    ├─ Memory / OOM ─────── ./ir mem
+ │    ├─ Disk / inodes ────── ./ir disk /
+ │    ├─ Network / DNS ────── ./ir net
+ │    └─ Service logs ─────── ./ir logs <unit>
+ ├─ Docker ────────────────── ./ir docker [name]
+ ├─ Kubernetes
+ │    ├─ Cluster snapshot ─── ./ir k8s [ns] [pod]
+ │    ├─ Node NotReady ────── ./ir k8s-node [node]
+ │    ├─ CrashLoop / HPA ──── ./ir k8s-app <ns> [name]
+ │    └─ 502 / endpoints ──── ./ir k8s-net <ns> [svc]
+ ├─ Prometheus / paging ───── PROM_URL=… ./ir prom
+ └─ EC2 unreachable ───────── ./ir ec2 i-… [region]
 
-Run: `./server_health.sh`
+Always snapshot before you change anything:
+  ./ir pack
+```
 
-Look for:
-- High load average vs CPU cores
-- Memory pressure (low available RAM)
-- Disk > 90% or inodes 100%
-- Failed services
-- Recent system errors
-
-## Step 2: Follow the Failing Component
-
-- **CPU high?** → `./cpu_debug.sh`
-- **Memory low / OOM?** → `./memory_debug.sh`
-- **Disk full?** → `./disk_debug.sh`
-- **Network timeout?** → `./network_debug.sh <target> <port>`
-- **Service running but broken?** → `./log_debug.sh <service>`
-- **Docker container?** → `./docker_debug.sh`
-- **Kubernetes pod?** → `./k8s_debug.sh <namespace>`
-- **AWS/EC2 issue?** → `./ec2_debug.sh <instance-id> [region]`
-
-## Quick Reference by Symptom
-
-- App slow + high CPU → cpu_debug.sh
-- App slow + high memory → memory_debug.sh
-- Can't write files → disk_debug.sh (check inodes too!)
-- Connection refused/timeout → network_debug.sh
-- Service keeps restarting → log_debug.sh + check NRestarts
-- Pod CrashLoopBackOff → k8s_debug.sh
-- Container exited with 137 → docker_debug.sh (OOM likely)
-- Security group blocking DB port → ec2_debug.sh
-
-## The Core Concept
-
-Alert → Hypothesis → Evidence → Fix
-
-Don't just run random commands. Map the symptom to the right tool, gather evidence, then fix.
+Long form: `docs/symptom-index.md`, `docs/cheatsheet.md`, `docs/incident-workflow.md`.

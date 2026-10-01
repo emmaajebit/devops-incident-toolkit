@@ -1,0 +1,32 @@
+
+════════════════════════════════════════════════════════════
+  Log Analysis
+  host=hds-6w8assew2qn8  utc=2026-09-20T13:13:21Z  toolkit=1.0.0
+════════════════════════════════════════════════════════════
+
+── Journal disk usage ──
+Archived and active journals take up 0B in the file system.
+
+boot list (last 5):
+
+── System errors (priority err+, last 100) ──
+-- No entries --
+
+── journal grep: 20 ──
+-- No entries --
+
+── Common application log paths (existence only) ──
+[OK]    /var/log/apache2/error.log
+
+── Auth / sudo (last 15 interesting lines) ──
+-- No entries --
+
+── Suggested next checks ──
+  Usage examples:
+    ./scripts/log_debug.sh
+    ./scripts/log_debug.sh nginx
+    ./scripts/log_debug.sh /var/log/nginx/error.log 200
+
+  Persistent noise: raise rate limits only after you understand the cause.
+  Correlation: match timestamps with cpu_debug / network_debug around the same window.
+cat: write error: Input/output error

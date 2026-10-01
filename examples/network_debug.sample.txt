@@ -1,0 +1,47 @@
+
+════════════════════════════════════════════════════════════
+  Network Diagnostics
+  host=hds-6w8assew2qn8  utc=2026-09-20T13:13:15Z  toolkit=1.0.0
+════════════════════════════════════════════════════════════
+
+── Interfaces ──
+/home/workdir/artifacts/devops-incident-response-toolkit/scripts/network_debug.sh: line 13: ip: command not found
+
+
+── Routes ──
+/home/workdir/artifacts/devops-incident-response-toolkit/scripts/network_debug.sh: line 18: ip: command not found
+
+rules:
+
+── Neighbor / ARP ──
+
+── DNS ──
+resolv.conf:
+nameserver 172.16.0.3
+
+
+getent kubernetes.default.svc.cluster.local: 10.236.16.1     STREAM kubernetes.default.svc.cluster.local
+getent google.com: 142.251.163.138 STREAM google.com
+getent cloudflare.com: 104.16.132.229  STREAM cloudflare.com
+head: write error: Input/output error
+(failed)
+
+── Listening sockets ──
+/home/workdir/artifacts/devops-incident-response-toolkit/scripts/network_debug.sh: line 48: netstat: command not found
+
+── Conntrack / firewall hints ──
+conntrack: 0 / 65536
+/home/workdir/artifacts/devops-incident-response-toolkit/scripts/network_debug.sh: line 54: 0: Input/output error
+/home/workdir/artifacts/devops-incident-response-toolkit/scripts/network_debug.sh: line 55: 0: Input/output error
+
+── Link errors (RX/TX drop, error, overrun) ──
+lo           rx_bytes=506636 rx_errs=0 rx_drop=0 tx_errs=0 tx_drop=0
+dummy0       rx_bytes=0 rx_errs=0 rx_drop=0 tx_errs=0 tx_drop=0
+eth0         rx_bytes=1532617 rx_errs=0 rx_drop=0 tx_errs=0 tx_drop=0
+sit0         rx_bytes=0 rx_errs=0 rx_drop=0 tx_errs=0 tx_drop=0
+
+── Suggested next checks ──
+  1. SYN backlog / TIME_WAIT explosion: ss -s and net.ipv4.tcp_max_syn_backlog.
+  2. Intermittent DNS: check systemd-resolved stub vs upstream; try dig @8.8.8.8.
+  3. Packet drops on virtio/ena: instance network credits, security groups, NACLs.
+  4. Pass a host to this script for ping/traceroute: ./network_debug.sh 1.1.1.1

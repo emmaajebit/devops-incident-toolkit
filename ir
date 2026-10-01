@@ -1,0 +1,5 @@
+#!/bin/bash
+# Thin wrapper so developers can run ./ir from the repo root.
+set -u
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+exec bash "${ROOT}/scripts/ir.sh" "$@"

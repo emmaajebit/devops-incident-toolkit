@@ -1,0 +1,75 @@
+
+════════════════════════════════════════════════════════════
+  CPU Troubleshooting
+  host=hds-6w8assew2qn8  utc=2026-09-20T13:12:58Z  toolkit=1.0.0
+════════════════════════════════════════════════════════════
+
+── Hardware / topology ──
+model:   Intel(R) Xeon(R) Platinum 8481C CPU @ 2.70GHz
+cores:   2
+sockets: 1
+Architecture:                         x86_64
+CPU(s):                               2
+On-line CPU(s) list:                  0,1
+Thread(s) per core:                   1
+Core(s) per socket:                   2
+Socket(s):                            1
+Virtualization:                       VT-x
+Hypervisor vendor:                    KVM
+Virtualization type:                  full
+NUMA node0 CPU(s):                    0,1
+
+── Load & run queue ──
+ 13:12:59 up 6 min,  0 user,  load average: 0.08, 0.05, 0.01
+loadavg raw: 0.08 0.05 0.01 1/113 2989
+procs: running=5/124
+
+/proc/stat (first 3 lines):
+cpu  640 0 795 70514 14 0 22 138 0 0
+cpu0 319 0 401 35247 6 0 8 71 0 0
+cpu1 321 0 394 35266 7 0 13 67 0 0
+
+── CPU time breakdown (1s sample) ──
+vmstat 1 5 (r = run queue, us/sy/id/wa/st):
+procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu
+ 0  0      0 1705360   1944 159172    0    0   381    38  482    4  1  1 98  0  0  0
+ 0  0      0 1705532   1944 159180    0    0     0     0  707 1505  1  2 98  0  0  0
+ 0  0      0 1705072   1944 159192    0    0     0     0  973 2143  2  3 96  0  1  0
+ 0  0      0 1706844   1944 159200    0    0     0     0 1021 2139  2  3 96  0  0  0
+ 0  0      0 1708704   1944 159216    0    0     0     0  968 2160  2  2 96  0  0  0
+
+── Steal / hypervisor pressure ──
+steal ticks=139 total=73160 steal%=0.19
+
+── Top consumers ──
+  PID  PPID USER      NI PRI %CPU %MEM   RSS STAT WCHAN            COMMAND         COMMAND
+   43     1 root       0  19  0.5  8.0 163820 Sl  ep_poll          MainThread      node /app/grok-computer-server.mjs
+   91    73 root       0  19  0.3  0.7 14692 Sl   futex_wait_queue grok-files      /usr/local/bin/grok-files mount / /home/workdir/artifacts --no-supervisor --ttl 5m --content-cache memory --deny-delete off --occ known --occ-conflict-policy retain
+   73     1 root       0  19  0.0  0.3  7708 Ssl  futex_wait_queue grok-files      grok-files mount / /home/workdir/artifacts
+    1     0 root       0  19  0.0  0.0     0 Ss   signalfd_dequeue catatonit       /.hades-container-tools/catatonit -P
+  107    91 root       0  19  0.0  0.0  1660 Ss   unix_stream_data fusermount3     fusermount3 -o fsname=grok-files,allow_other,auto_unmount -- /home/workdir/artifacts
+ 2926     0 root       0  19  0.0  0.0  1668 Ss   do_wait          sh              sh -c _body=$(mktemp /tmp/_shell_body_XXXXXX) && cat > "$_body" <<'__BODY_EOF_16ef0c3279832993__' {"method":"tools/call","params":{"name":"bash","arguments":{"command":"export NO_COLOR=1\nOUT=/home/workdir/artifacts/devops-incident-response-toolkit/examples\nSCR=/home/workdir/artifacts/devops-incident-response-toolkit/scripts\ntimeout 20 bash \"$SCR/cpu_debug.sh\" > \"$OUT/cpu_debug.sample.txt\" 2>&1; echo cpu:$?\ntimeout 20 bash \"$SCR/memory_debug.sh\" > \"$OUT/memory_debug.sample.txt\" 2>&1; echo mem:$?\ntimeout 15 bash \"$SCR/network_debug.sh\" > \"$OUT/network_debug.sample.txt\" 2>&1; echo net:$?\ntimeout 12 bash \"$SCR/log_debug.sh\" 20 > \"$OUT/log_debug.sample.txt\" 2>&1; echo log:$?\ntimeout 8 bash \"$SCR/docker_debug.sh\" > \"$OUT/docker_debug.sample.txt\" 2>&1; echo dock:$?\ntimeout 8 bash \"$SCR/k8s_debug.sh\" > \"$OUT/k8s_debug.sample.txt\" 2>&1; echo k8s:$?\ntimeout 5 bash \"$SCR/ec2_debug.sh\" > \"$OUT/ec2_debug.sample.txt\" 2>&1; echo ec2:$?\ntimeout 15 bash \"$SCR/disk_debug.sh\" /tmp > \"$OUT/disk_debug.sample.txt\" 2>&1; echo disk:$?\nwc -l \"$OUT\"/*","description":"Capture remaining sample outputs"},"_meta":{"traceparent":"00-d690a1600884cf0d8023e3f456ef4bb8-550ecc4e9ec4d4cf-01"}}} __BODY_EOF_16ef0c3279832993__ curl -s -X POST http://127.0.0.1:4242/sessions/d45b60d9-b198-4b18-92c7-0fe6118daccf/tools/call -H 'Content-Type: application/json' -d @"$_body"; rm -f "$_body"
+ 2933  2926 root       0  19  0.0  0.4  9956 S    do_poll.constpro curl            curl -s -X POST http://127.0.0.1:4242/sessions/d45b60d9-b198-4b18-92c7-0fe6118daccf/tools/call -H Content-Type: application/json -d @/tmp/_shell_body_NERbqj
+ 2934    43 root       0  19  0.0  0.1  3236 Ss   do_wait          bash            /bin/bash -l -c TRACEPARENT='00-d690a1600884cf0d8023e3f456ef4bb8-550ecc4e9ec4d4cf-01' export NO_COLOR=1 OUT=/home/workdir/artifacts/devops-incident-response-toolkit/examples SCR=/home/workdir/artifacts/devops-incident-response-toolkit/scripts timeout 20 bash "$SCR/cpu_debug.sh" > "$OUT/cpu_debug.sample.txt" 2>&1; echo cpu:$? timeout 20 bash "$SCR/memory_debug.sh" > "$OUT/memory_debug.sample.txt" 2>&1; echo mem:$? timeout 15 bash "$SCR/network_debug.sh" > "$OUT/network_debug.sample.txt" 2>&1; echo net:$? timeout 12 bash "$SCR/log_debug.sh" 20 > "$OUT/log_debug.sample.txt" 2>&1; echo log:$? timeout 8 bash "$SCR/docker_debug.sh" > "$OUT/docker_debug.sample.txt" 2>&1; echo dock:$? timeout 8 bash "$SCR/k8s_debug.sh" > "$OUT/k8s_debug.sample.txt" 2>&1; echo k8s:$? timeout 5 bash "$SCR/ec2_debug.sh" > "$OUT/ec2_debug.sample.txt" 2>&1; echo ec2:$? timeout 15 bash "$SCR/disk_debug.sh" /tmp > "$OUT/disk_debug.sample.txt" 2>&1; echo disk:$? wc -l "$OUT"/* bash
+ 2940  2934 root       0  19  0.0  0.0  1624 S    x64_sys_rt_sigsu timeout         timeout 20 bash /home/workdir/artifacts/devops-incident-response-toolkit/scripts/cpu_debug.sh
+ 2947  2940 root       0  19  0.0  0.1  3292 S    do_wait          bash            bash /home/workdir/artifacts/devops-incident-response-toolkit/scripts/cpu_debug.sh
+ 3094  2947 root       0  19  0.0  0.1  3908 R    -                ps              ps -eo pid,ppid,user,ni,pri,pcpu,pmem,rss,stat,wchan:16,comm,args --sort=-pcpu
+ 3095  2947 root       0  19  0.0  0.0  1336 S    pipe_read        head            head -n 16
+
+── Runnable / D-state / zombies ──
+STAT legend: R=run D=uninterruptible sleep Z=zombie
+STAT   PID USER     %CPU COMMAND
+R     3108 root      0.0 ps
+head: write error: Input/output error
+[OK]    no D-state or zombie processes
+
+── CPU throttling / thermal (if available) ──
+
+── Suggested next checks ──
+  1. If steal% is high on EC2: check instance type, credit balance (T-family),
+     and CloudWatch CPUCreditBalance / CPUSurplusCreditsCharged.
+  2. If wa% (iowait) is high: run disk_debug.sh — CPU is waiting on storage.
+  3. If one process dominates: capture stack with `perf top` or `pidstat -t`.
+  4. If load >> cores but CPU idle: look for uninterruptible I/O or thread explosion.
+cat: write error: Input/output error

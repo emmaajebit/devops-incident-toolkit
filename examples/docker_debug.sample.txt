@@ -1,0 +1,6 @@
+
+════════════════════════════════════════════════════════════
+  Docker Troubleshooting
+  host=hds-6w8assew2qn8  utc=2026-09-20T13:13:24Z  toolkit=1.0.0
+════════════════════════════════════════════════════════════
+[FAIL]  docker CLI not found in PATH

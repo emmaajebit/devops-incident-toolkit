@@ -1,0 +1,1 @@
+Usage: /home/workdir/artifacts/devops-incident-response-toolkit/scripts/ec2_debug.sh <instance-id> [region]

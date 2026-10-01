@@ -1,0 +1,20 @@
+name: syntax
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  bash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: bash -n all scripts
+        run: |
+          bash -n ir
+          bash -n scripts/lib/common.sh
+          for f in scripts/*.sh; do
+            echo "check $f"
+            bash -n "$f"
+          done

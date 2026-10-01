@@ -1,0 +1,27 @@
+# Annotated shape (engine present)
+
+════════════════════════════════════════════════════════════
+  Docker Troubleshooting
+════════════════════════════════════════════════════════════
+
+── Engine ──
+Client=27.0.3 Server=27.0.3 API=1.46
+Server Version: 27.0.3
+Cgroup Driver: systemd
+Storage Driver: overlay2
+Logging Driver: json-file
+
+── Disk used by Docker ──
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          12        8         3.1GB     900MB
+Containers      8         6         220MB     40MB
+Local Volumes   4         2         1.4GB     1.1GB
+
+── Containers ──
+ID           NAMES     STATUS         PORTS                  IMAGE
+a1b2c3d4     api       Up 3 hours     0.0.0.0:8080->8080/tcp app:1.14
+e5f6g7h8     worker    Restarting     …                      app:1.14
+
+# Restarting + OOMKilled=true → memory_debug on the host and raise the limit
+# after you confirm a leak.
+)

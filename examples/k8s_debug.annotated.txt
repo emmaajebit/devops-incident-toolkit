@@ -1,0 +1,17 @@
+# Annotated shape (cluster reachable)
+
+── Context ──
+gke_prod_us-central1_app
+Kubernetes control plane is running at https://…
+
+── Component / node health ──
+NAME       STATUS   ROLES    AGE   VERSION
+node-1     Ready    <none>   40d   v1.31.2
+node-2     Ready    <none>   40d   v1.31.2
+
+── Unhealthy workloads (all namespaces) ──
+prod   api-7f9c-xk2nq   0/1   CrashLoopBackOff   14   23m
+
+# Next: ./scripts/k8s_debug.sh prod api-7f9c-xk2nq
+# Read events first, then logs --previous.
+)

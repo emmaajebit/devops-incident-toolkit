@@ -1,0 +1,111 @@
+
+════════════════════════════════════════════════════════════
+  Memory Troubleshooting
+  host=hds-6w8assew2qn8  utc=2026-09-20T13:13:07Z  toolkit=1.0.0
+════════════════════════════════════════════════════════════
+
+── Overview ──
+               total        used        free      shared  buff/cache   available
+Mem:           1.9Gi       290Mi       1.6Gi       1.5Mi       157Mi       1.7Gi
+Swap:             0B          0B          0B
+
+MemTotal:             2029492 kB
+MemFree:              1707508 kB
+MemAvailable:         1732252 kB
+Buffers:                 1944 kB
+Cached:                153060 kB
+SwapCached:                 0 kB
+SwapTotal:                  0 kB
+SwapFree:                   0 kB
+Dirty:                    112 kB
+Writeback:                  0 kB
+AnonPages:             129496 kB
+Mapped:                 76680 kB
+Shmem:                   1516 kB
+SReclaimable:            6212 kB
+WritebackTmp:               0 kB
+CommitLimit:          1014744 kB
+Committed_AS:          379676 kB
+ShmemHugePages:             0 kB
+ShmemPmdMapped:             0 kB
+FilePmdMapped:              0 kB
+
+── Pressure / PSI (Linux 4.20+) ──
+[INFO]  PSI not available on this kernel
+
+── Top RSS consumers ──
+  PID USER     %MEM   RSS    VSZ COMMAND         COMMAND
+   43 root      8.0 163820 1814672 MainThread    node /app/grok-computer-server.mjs
+   91 root      0.7 14692 474476 grok-files      /usr/local/bin/grok-files mount / /home/workdir/artifacts --no-supervisor --ttl 5m --content-cache memory --deny-delete off --occ known --occ-conflict-policy retain
+ 2933 root      0.4  9956  20772 curl            curl -s -X POST http://127.0.0.1:4242/sessions/d45b60d9-b198-4b18-92c7-0fe6118daccf/tools/call -H Content-Type: application/json -d @/tmp/_shell_body_NERbqj
+   73 root      0.3  7708 150624 grok-files      grok-files mount / /home/workdir/artifacts
+ 3165 root      0.1  3804   7860 ps              ps -eo pid,user,pmem,rss,vsz,comm,args --sort=-rss
+ 2934 root      0.1  3236   4324 bash            /bin/bash -l -c TRACEPARENT='00-d690a1600884cf0d8023e3f456ef4bb8-550ecc4e9ec4d4cf-01' export NO_COLOR=1 OUT=/home/workdir/artifacts/devops-incident-response-toolkit/examples SCR=/home/workdir/artifacts/devops-incident-response-toolkit/scripts timeout 20 bash "$SCR/cpu_debug.sh" > "$OUT/cpu_debug.sample.txt" 2>&1; echo cpu:$? timeout 20 bash "$SCR/memory_debug.sh" > "$OUT/memory_debug.sample.txt" 2>&1; echo mem:$? timeout 15 bash "$SCR/network_debug.sh" > "$OUT/network_debug.sample.txt" 2>&1; echo net:$? timeout 12 bash "$SCR/log_debug.sh" 20 > "$OUT/log_debug.sample.txt" 2>&1; echo log:$? timeout 8 bash "$SCR/docker_debug.sh" > "$OUT/docker_debug.sample.txt" 2>&1; echo dock:$? timeout 8 bash "$SCR/k8s_debug.sh" > "$OUT/k8s_debug.sample.txt" 2>&1; echo k8s:$? timeout 5 bash "$SCR/ec2_debug.sh" > "$OUT/ec2_debug.sample.txt" 2>&1; echo ec2:$? timeout 15 bash "$SCR/disk_debug.sh" /tmp > "$OUT/disk_debug.sample.txt" 2>&1; echo disk:$? wc -l "$OUT"/* bash
+ 3144 root      0.1  3132   4456 bash            bash /home/workdir/artifacts/devops-incident-response-toolkit/scripts/memory_debug.sh
+ 2926 root      0.0  1668   2800 sh              sh -c _body=$(mktemp /tmp/_shell_body_XXXXXX) && cat > "$_body" <<'__BODY_EOF_16ef0c3279832993__' {"method":"tools/call","params":{"name":"bash","arguments":{"command":"export NO_COLOR=1\nOUT=/home/workdir/artifacts/devops-incident-response-toolkit/examples\nSCR=/home/workdir/artifacts/devops-incident-response-toolkit/scripts\ntimeout 20 bash \"$SCR/cpu_debug.sh\" > \"$OUT/cpu_debug.sample.txt\" 2>&1; echo cpu:$?\ntimeout 20 bash \"$SCR/memory_debug.sh\" > \"$OUT/memory_debug.sample.txt\" 2>&1; echo mem:$?\ntimeout 15 bash \"$SCR/network_debug.sh\" > \"$OUT/network_debug.sample.txt\" 2>&1; echo net:$?\ntimeout 12 bash \"$SCR/log_debug.sh\" 20 > \"$OUT/log_debug.sample.txt\" 2>&1; echo log:$?\ntimeout 8 bash \"$SCR/docker_debug.sh\" > \"$OUT/docker_debug.sample.txt\" 2>&1; echo dock:$?\ntimeout 8 bash \"$SCR/k8s_debug.sh\" > \"$OUT/k8s_debug.sample.txt\" 2>&1; echo k8s:$?\ntimeout 5 bash \"$SCR/ec2_debug.sh\" > \"$OUT/ec2_debug.sample.txt\" 2>&1; echo ec2:$?\ntimeout 15 bash \"$SCR/disk_debug.sh\" /tmp > \"$OUT/disk_debug.sample.txt\" 2>&1; echo disk:$?\nwc -l \"$OUT\"/*","description":"Capture remaining sample outputs"},"_meta":{"traceparent":"00-d690a1600884cf0d8023e3f456ef4bb8-550ecc4e9ec4d4cf-01"}}} __BODY_EOF_16ef0c3279832993__ curl -s -X POST http://127.0.0.1:4242/sessions/d45b60d9-b198-4b18-92c7-0fe6118daccf/tools/call -H 'Content-Type: application/json' -d @"$_body"; rm -f "$_body"
+  107 root      0.0  1660   2704 fusermount3     fusermount3 -o fsname=grok-files,allow_other,auto_unmount -- /home/workdir/artifacts
+ 3137 root      0.0  1456   2704 timeout         timeout 20 bash /home/workdir/artifacts/devops-incident-response-toolkit/scripts/memory_debug.sh
+ 3166 root      0.0  1420   2708 head            head -n 16
+    1 root      0.0     0    216 catatonit       /.hades-container-tools/catatonit -P
+
+top VSZ (virtual — watch for leaks that have not faulted in):
+  PID USER        VSZ   RSS COMMAND
+   43 root     1814672 163820 MainThread
+   91 root     474476 14692 grok-files
+   73 root     150624  7708 grok-files
+ 2933 root      20772  9956 curl
+ 3174 root       7860  3804 ps
+ 3144 root       4456  3132 bash
+ 2934 root       4324  3236 bash
+
+── Slab / kernel caches ──
+largest slabs:
+  kernfs_node_cache                2027760 pages-ish
+  kmalloc-8k                       1867776 pages-ish
+  kmalloc-4k                       1474560 pages-ish
+  dentry                           1177344 pages-ish
+  ovl_inode                        976488 pages-ish
+  radix_tree_node                  932064 pages-ish
+  inode_cache                      888888 pages-ish
+  task_struct                      779520 pages-ish
+[INFO]  run: slabtop -o | head
+
+── Swap activity ──
+vmstat 1 5 (si/so = swap in/out):
+procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu
+ 0  0      0 1706480   1944 159296    0    0   372    37  497    4  1  1 98  0  0  0
+ 0  0      0 1708784   1944 159304    0    0     0     0  706 1411  1  2 97  0  1  0
+ 0  0      0 1710008   1944 159320    0    0     0    60 1047 2183  1  3 96  0  0  0
+ 0  0      0 1705844   1944 159324    0    0     0     0 1066 2274  2  3 96  0  0  0
+ 0  0      0 1708992   1944 159344    0    0     0     0  966 2055  2  2 95  0  0  0
+
+── OOM history ──
+dmesg / journal OOM killer events:
+[OK]    no recent OOM lines in current buffer
+
+── cgroup memory (v1/v2) ──
+[INFO]  cgroup v2
+274993152
+anon 126345216
+file 139907072
+kernel 8445952
+kernel_stack 458752
+pagetables 2699264
+sec_pagetables 0
+percpu 848
+sock 0
+vmalloc 4096
+shmem 0
+zswap 0
+zswapped 0
+file_mapped 66924544
+file_dirty 45056
+file_writeback 0
+
+── Suggested next checks ──
+  1. MemAvailable low + cache high is often healthy (cache will shrink).
+  2. Committed_AS >> CommitLimit with overcommit=0 will cause allocation failures.
+  3. Repeated OOM: capture /proc/<pid>/smaps_rollup before the next crash.
+  4. Containerized? Check docker stats / kubectl top and cgroup limits — the
+     host may look fine while a pod is hitting its own memory.max.
