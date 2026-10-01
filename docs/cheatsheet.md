@@ -1,5 +1,7 @@
 # Incident cheatsheet (print this)
 
+Full playbook: [RUNBOOK.md](../RUNBOOK.md). Repo front door: [README.md](../README.md).
+
 ```text
 ./ir help
 ./ir health
